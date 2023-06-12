@@ -38,8 +38,8 @@ export default async function Home() {
                     <p>hello world. {title1.node.title}</p>
                     <p>hello world. {title1.node.images.edges[0].node.transformedSrc}</p>
                     <Image 
-                        // src = {title1.node.images.edges[0].node.transformedSrc}
-                        src = 'https://cdn.shopify.com/s/files/1/0421/0242/3709/products/AmazoniteGravel1.jpg?v=1603792822'
+                        src = {title1.node.images.edges[0].node.transformedSrc}
+                        // src = 'https://cdn.shopify.com/s/files/1/0421/0242/3709/products/AmazoniteGravel1.jpg?v=1603792822'
                         width={500}
                         height={500}
                         alt='hi'
