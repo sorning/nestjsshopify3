@@ -8,14 +8,14 @@ import {doc, updateDoc} from 'firebase/firestore'
 
 export default function PopupModal() {
     //use transfer data from parent
-    const {items, setItems,updateItemId,open,setOpen, updateNewItem, setUpdateNewItem}=useContext(EditPopupContext)
+    const {items, setItems,updateItemId,open,setOpen,}=useContext(EditPopupContext)
     // const [open, setOpen] = useState(true)
     // we create the [open, steopen]=usestate() in the parent, and usecontext to import them from parent to here.
     
     const cancelButtonRef = useRef(null)
 
     //updata item step 2 : create updateitem using usestate , and create function updatenewitem,then update data to firebase database
-    // const [updateNewItem, setUpdateNewItem]=useState({name:'',price:''})
+    const [updateNewItem, setUpdateNewItem]=useState({name:'',price:''})
     const updateItem=async (id)=>{
         if (updateNewItem.name!='' && updateNewItem.price!='') {
             await updateDoc(doc(db,'items',id),{

@@ -45,15 +45,9 @@ export default function firebasefirestore8() {
     const [open, setOpen]=useState(false)
     const [updateItemId, setUpdateItemId]=useState('')
     // const [updateNewItem, setUpdateNewItem]=useState({name:'',price:''})
-    const [updateNewItem, setUpdateNewItem]=useState({name:'1',price:'1'})
     return (
         <>
-            <EditPopupContext.Provider value={{items,setItems,updateItemId,open, setOpen, updateNewItem,setUpdateNewItem}}>
-            <p>{updateNewItem.name}</p>
-            <p>hi</p>
-            <button
-            onClick={()=>{setUpdateNewItem(pre=>({...pre,name:'jack'}))}}
-            >hihihihi</button>
+            <EditPopupContext.Provider value={{items,setItems,updateItemId,open, setOpen}}>
             <main className='flex justify-between min-h-screen flex-col sm:p-24 p-4'>
                 <div className='z-10 w-full items-center justify-between max-w-5xl font-moto text-sm'>
                     <h1 className='text-4xl p-4 text-center'>Expense Tracker</h1>
@@ -80,22 +74,8 @@ export default function firebasefirestore8() {
                                     </div>
                                     <button
                                     // onClick={()=>{setUpdateItemId(item.id);setOpen(true);console.log(item.id);console.log('test');setUpdateNewItem({...[],name:item.name,price:item.price})}}
-
-                                    // onClick={()=>{setUpdateItemId(item.id);setOpen(true);console.log(item.id);console.log('test');console.log(item);setUpdateNewItem({...updateNewItem,name:'item.name',price:'item.price'});console.log(updateNewItem)}}
-
-                                    onClick={
-                                    ()=>{
-                                    setUpdateItemId(item.id);
-                                    setOpen(true);
-                                    console.log(item.id);
-                                    console.log('test');
-                                    console.log(item);
-                                    setUpdateNewItem(pre=>({...pre,name:item.name,price:item.price}));
-                                    console.log(updateNewItem)
-                                    }
-                                    }
+                                    onClick={()=>{setUpdateItemId(item.id);setOpen(true);console.log(item.id);console.log('test');}}
                                     // onClick={()=>{setOpen(true);console.log('open')}}
-                                    // onClick={updateButton}
                                     className="p-4 border-l-2 border-slate-900 w-16 hover:bg-slate-900"
                                     >Edit</button>
                                     <button 
