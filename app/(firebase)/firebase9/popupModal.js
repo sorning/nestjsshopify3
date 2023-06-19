@@ -19,8 +19,8 @@ export default function PopupModal() {
     const updateItem=async (id)=>{
         if (updateNewItem.name!='' && updateNewItem.price!='') {
             await updateDoc(doc(db,'items',id),{
-                name:updateNewItem.name,
-                price:updateNewItem.price
+                name:'updateNewItem.name',
+                price:'updateNewItem.price'
             })
             console.log('updateitem')
         }
@@ -68,7 +68,9 @@ export default function PopupModal() {
                                                 </p>
                                                 <div className='grid grid-cols-3 w-full'>
                                                     <input 
+                                                    // for new item data for popup modal
                                                     onChange={(e)=>setUpdateNewItem({...updateNewItem, name:e.target.value})}
+                                                    // give a initial value to input
                                                     value={updateNewItem.name}
                                                     placeholder='Enter Data' className='text-black border border-slate-950 p-1 my-2 rounded col-span-2'></input>
                                                     <input 
@@ -77,13 +79,13 @@ export default function PopupModal() {
                                                     placeholder='Enter $' className='text-black border border-slate-950 p-1 my-2 ml-3 rounded'></input>
                                                 </div>
                                                 
-                                                <p>
+                                                {/* <p>
                                                     {items.map((item)=>(
                                                         <div className='text-black'>
                                                           <p>{item.name}</p> 
                                                             </div>
                                                     ))}
-                                                </p>
+                                                </p> */}
                                             </div>
                                         </div>
                                     </div>
@@ -92,6 +94,7 @@ export default function PopupModal() {
                                     <button
                                         type="button"
                                         className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
+                                        // handle cancel button for popup modal
                                         onClick={(item) => {setOpen(false);updateItem(updateItemId);}}
                                     >
                                         Update

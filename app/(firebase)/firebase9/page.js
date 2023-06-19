@@ -4,6 +4,7 @@ import {db} from '../../../lib/firebase'
 import { addDoc,collection,query,onSnapshot,doc,deleteDoc,updateDoc } from "firebase/firestore"
 import PopupModal from "./popupModal"
 
+//create and export context for popup modal
 export const EditPopupContext=createContext()
 export default function firebasefirestore8() {
     const [items, setItems]=useState([
@@ -14,6 +15,7 @@ export default function firebasefirestore8() {
     //add item to database
     const [newItem, setNewItem]=useState({name:'',price:''})
     const addItem=async (e)=>{
+        //prevent refresh
         e.preventDefault();
         if (newItem.name!=''&&newItem.price!='') {
             await addDoc(collection(db,'items'),{
@@ -40,20 +42,16 @@ export default function firebasefirestore8() {
     },[])
     //delete item from database
     const deleteItem=async (id)=>{await deleteDoc(doc(db,'items',id))}
-    //updataItem step 1 : transfer data to popup modal
+    //updataItem step 1 : transfer data for popup modal
     // use usestate from child component
     const [open, setOpen]=useState(false)
     const [updateItemId, setUpdateItemId]=useState('')
-    // const [updateNewItem, setUpdateNewItem]=useState({name:'',price:''})
+    // const [updateNewItem, setUpdateNewItem]=useState({name:'',price:''}) for popup modal
     const [updateNewItem, setUpdateNewItem]=useState({name:'1',price:'1'})
     return (
-        <>
+        <>  
+            {/* create context provider for child component for popup modal */}
             <EditPopupContext.Provider value={{items,setItems,updateItemId,open, setOpen, updateNewItem,setUpdateNewItem}}>
-            <p>{updateNewItem.name}</p>
-            <p>hi</p>
-            <button
-            onClick={()=>{setUpdateNewItem(pre=>({...pre,name:'jack'}))}}
-            >hihihihi</button>
             <main className='flex justify-between min-h-screen flex-col sm:p-24 p-4'>
                 <div className='z-10 w-full items-center justify-between max-w-5xl font-moto text-sm'>
                     <h1 className='text-4xl p-4 text-center'>Expense Tracker</h1>
@@ -79,10 +77,7 @@ export default function firebasefirestore8() {
                                         <span>${item.price}</span>
                                     </div>
                                     <button
-                                    // onClick={()=>{setUpdateItemId(item.id);setOpen(true);console.log(item.id);console.log('test');setUpdateNewItem({...[],name:item.name,price:item.price})}}
-
-                                    // onClick={()=>{setUpdateItemId(item.id);setOpen(true);console.log(item.id);console.log('test');console.log(item);setUpdateNewItem({...updateNewItem,name:'item.name',price:'item.price'});console.log(updateNewItem)}}
-
+                                    // use setstate to give new data and be used for child component for popup modal
                                     onClick={
                                     ()=>{
                                     setUpdateItemId(item.id);
@@ -94,8 +89,6 @@ export default function firebasefirestore8() {
                                     console.log(updateNewItem)
                                     }
                                     }
-                                    // onClick={()=>{setOpen(true);console.log('open')}}
-                                    // onClick={updateButton}
                                     className="p-4 border-l-2 border-slate-900 w-16 hover:bg-slate-900"
                                     >Edit</button>
                                     <button 
