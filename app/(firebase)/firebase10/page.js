@@ -40,7 +40,7 @@ export default function firebasefirestore10() {
     const deleteItem = async (id) => { await deleteDoc(doc(db, 'items', id)) }
     //updata data from database using createcontext usecontext popup modal
     const [open, setOpen] = useState(false)
-    const [editUpdateItem, setEditUpdateItem]=useState({name:'jack',price:''})
+    const [editUpdateItem, setEditUpdateItem]=useState({name:'',price:''})
     // const [editUpdateItemId,SetEditUpdateItemId]=useState('')
     return (
         <>
