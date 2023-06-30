@@ -14,16 +14,17 @@ export default function Login() {
 
     const router=useRouter()
 
-    const handleSubmit=(e)=>{
+    const handleSubmit=async (e)=>{
         e.preventDefault()
         
         try {
             setError('')
             setLoading(true)
-            login(emailRef.current.value, passwordRef.current.value)
+            await login(emailRef.current.value, passwordRef.current.value)
             router.push('/firebaseauth1/dashboard')
-        } catch {
-            setError('Failed to created an account')
+        } catch(error) {
+            console.log(error.message)
+            setError('Failed to sign in.')
         }
         setLoading(false)
     }
@@ -68,9 +69,9 @@ export default function Login() {
                     Password
                   </label>
                   <div className="text-sm">
-                    <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">
+                    <Link href="/firebaseauth1/resetpassword" className="font-semibold text-indigo-600 hover:text-indigo-500">
                       Forgot password?
-                    </a>
+                    </Link>
                   </div>
                 </div>
                 <div className="mt-2">

@@ -15,4 +15,6 @@ module.exports = {
     },
   },
   plugins: [],
+  //add darkmode from tailwind 
+  darkMode:'class',
 }

@@ -1,29 +1,27 @@
-'use client'
+import { Fragment, useState } from "react"
 import { Menu, Transition } from "@headlessui/react"
-import { Fragment } from "react"
-import { useState } from "react"
 import { useAuthContext } from "../context/AuthContext"
+import { auth } from "@/lib/firebase"
 import { useRouter } from "next/navigation"
-
-const classNames=(...classes)=>{return classes.filter(Boolean).join(' ')}
-
-export default function Dashboard() {
-    const [erro, setError]=useState('')
-    const {currentUser, logout}=useAuthContext()
+function classNames(...classes){
+    return classes.filter(Boolean).join(' ')
+}
+export default function DashBoard() {
+    const {currentUser, signout}=useAuthContext()
+    const [error, setError]=useState()
     const router=useRouter()
-
-    const handleLogout=async ()=>{
-        setError('')
+    const handleSignOut=async ()=>{
         try {
-            await logout()
-            router.push('/firebaseauth1/login')
+            setError('')
+            await signout(auth)
+            router.push('/firebaseauth2/signin')
         } catch {
-            setError('Failed to logout')
+            setError('Fail to Sign Out.')
         }
     }
-
     return (
         <Menu as="div" className="relative ml-3">
+            {error&&alert(error)}
                   <div>
                     <Menu.Button className="flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                       <span className="sr-only">Open user menu</span>
@@ -33,8 +31,8 @@ export default function Dashboard() {
                         alt=""
                       />
                     </Menu.Button>
-                    <strong>Email:</strong>{Boolean(currentUser)&&currentUser.email}
                   </div>
+                  {currentUser&&JSON.stringify(currentUser.email)}
                   <Transition
                     as={Fragment}
                     enter="transition ease-out duration-100"
@@ -68,7 +66,8 @@ export default function Dashboard() {
                       <Menu.Item>
                         {({ active }) => (
                           <button
-                            onClick={handleLogout}
+                          onClick={handleSignOut}
+                            href="#"
                             className={classNames(active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700')}
                           >
                             Sign out

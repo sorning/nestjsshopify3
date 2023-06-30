@@ -1,5 +1,5 @@
 'use client'
-import { createUserWithEmailAndPassword, onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword, signOut } from 'firebase/auth'
+import { createUserWithEmailAndPassword, onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword, signOut, updatePassword, updateEmail } from 'firebase/auth'
 import {auth} from '../../../../lib/firebase'
 import { createContext, useContext, useEffect, useState } from "react"
 const AuthContext=createContext()
@@ -16,8 +16,21 @@ export const AuthContextProvider=({children})=>{
     // function login(email, password) {
     //     return auth.signInWithEmailAndPassword(email, password)
     // }
-    const login=(email,password)=>{
-        return signInWithEmailAndPassword(auth,email,password)
+    // const login=(email,password)=>{
+    //     return signInWithEmailAndPassword(auth,email,password)
+    // }
+    const login=async (email,password)=>{
+        return signInWithEmailAndPassword(auth, email, password)
+        // .then((userCredential)=>{
+        //     const user=userCredential.user
+        //     console.log('login fun')
+        // })
+        // .catch((error)=>{
+        //     const errorCode=error.errorCode
+        //     const errorMessage=error.message
+        //     console.log(errorMessage)
+        //     console.log('logincontext')
+        // })
     }
     // function logout() {
     //     return auth.signOut()
@@ -39,14 +52,15 @@ export const AuthContextProvider=({children})=>{
     const resetPassword=(email)=>{
         return sendPasswordResetEmail(auth,email)
     }
-    const updatePassword=(email)=>{
-        return updatePassword(auth.currentUser,email)
+    const updateEmailContext=(email)=>{
+        return updateEmail(auth.currentUser,email)
     }
 
     // function updateEmail(email) {
     //     return currentUser.updateEmail(email)
     // }
-    const updateEmail=(password)=>{
+    
+    const updatePasswordContext=(password)=>{
         return updatePassword(auth.currentUser, password)
     }
     // function updatePassword(password) {
@@ -65,13 +79,14 @@ export const AuthContextProvider=({children})=>{
         login,
         logout,
         resetPassword,
-        updateEmail,
-        updatePassword,
+        updateEmailContext,
+        updatePasswordContext,
     }
 
     return (
         <AuthContext.Provider value={value}>
             {!loading && children}
+            {JSON.stringify(currentUser)}
         </AuthContext.Provider>
     )
 }

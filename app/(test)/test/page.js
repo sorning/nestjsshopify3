@@ -21,6 +21,8 @@ export default function test() {
     // function decrease() {
     // setCount(pre=>pre-1)
     // }
+    
+    console.log(window.matchMedia('(prefers-color-scheme: dark)').matches)
     return (
         <>
             <button
