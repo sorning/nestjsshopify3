@@ -2,7 +2,7 @@
 import Navbar from "../../components/layout/navbar/navbar";
 import Footer from "../../components/layout/footer/footer";
 // import About from "@/pages/graph";
-import { ShopifyFetch } from "@/lib/shopifyquery";
+import { ShopifyFetch } from "@/lib/shopifyqueryTest2";
 import Image from "next/image";
 
 export default async function Home() {

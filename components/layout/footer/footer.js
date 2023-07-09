@@ -10,11 +10,11 @@ import WillingWoodsIcon from '@/components/icons/willingwoodsicon';
 const { SITE_NAME } = process.env;
 
 const footermenu = [
-  { name: 'Shop', href: '#', current: true},
-  { name: 'Neclace', href: '#', current: false},
-  { name: 'Homeappliance', href: '#', current: false},
-  { name: 'Help', href: '#', current: false},
-  { name: 'Contact', href: '#', current: true},
+  { name: 'Shop', href: '#', current: true },
+  { name: 'Neclace', href: '#', current: false },
+  { name: 'Homeappliance', href: '#', current: false },
+  { name: 'Help', href: '#', current: false },
+  { name: 'Contact', href: '#', current: true },
 ]
 
 function classNames(...classes) {
@@ -24,12 +24,12 @@ function classNames(...classes) {
 export default async function Footer() {
   const currentYear = new Date().getFullYear();
   const copyrightDate = 2023 + (currentYear > 2023 ? `-${currentYear}` : '');
-//   const menu = await getMenu('next-js-frontend-footer-menu');
+  //   const menu = await getMenu('next-js-frontend-footer-menu');
 
   return (
     <footer className="border-t border-gray-700 bg-white text-black dark:bg-black dark:text-white">
       <div className="mx-auto w-full max-w-7xl px-6">
-        <div className="grid grid-cols-1 gap-8 border-b border-gray-700 py-12 transition-colors duration-150 lg:grid-cols-12">
+        <div className="grid grid-cols-1 gap-8 border-b border-gray-700 py-12 transition-colors duration-150 lg:grid-cols-12 w-full">
           <div className="col-span-1 lg:col-span-2">
             <a className="flex flex-initial items-center font-bold md:mr-24" href="/">
               <span className="mr-2">
@@ -54,29 +54,30 @@ export default async function Footer() {
               </ul>
             </nav>
           ) : null} */}
-          
-          {
-            <nav className="col-span-1 lg:col-span-4">
-              <ul className="grid md:grid-flow-col md:grid-cols-3 md:grid-rows-5">
-                {footermenu.map((item) => (
-                  <li key={item.name} className="py-3 md:py-0 md:pb-4">
-                    <Link
-                      href={item.href}
-                      className="text-gray-800 transition duration-150 ease-in-out hover:text-gray-300 dark:text-gray-100"
-                    >
-                      {item.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-          }
-          {
-            <nav className="col-span-1 lg:col-span-4">
-              <ul className="grid md:grid-flow-col md:grid-cols-3 md:grid-rows-4">
-                {footermenu.map((item) => (
-                  <li key={item.name} className="py-3 md:py-0 md:pb-4">
-                    <a
+
+          <div className='flex justify-between lg:col-span-10'>
+            {
+              <nav className="col-span-1 lg:col-span-4">
+                <ul className="grid md:grid-flow-col md:grid-cols-3 md:grid-rows-5">
+                  {footermenu.map((item) => (
+                    <li key={item.name} className="py-3 md:py-0 md:pb-4">
+                      <Link
+                        href={item.href}
+                        className="text-gray-800 transition duration-150 ease-in-out hover:text-gray-300 dark:text-gray-100"
+                      >
+                        {item.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+            }
+            {
+              <nav className="col-span-1 lg:col-span-4">
+                <ul className="grid md:grid-flow-col md:grid-cols-3 md:grid-rows-4">
+                  {footermenu.map((item) => (
+                    <li key={item.name} className="py-3 md:py-0 md:pb-4">
+                      <a
                         key={item.name}
                         href={item.href}
                         className={classNames(
@@ -85,16 +86,15 @@ export default async function Footer() {
                         )}
                         aria-current={item.current ? 'page' : undefined}
                       >
-                      {item.name}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-          }
-           
-          
-          
+                        {item.name}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+            }
+          </div>
+
           <div className="col-span-1 text-black dark:text-white lg:col-span-2">
             <a aria-label="Github Repository" href="https://github.com/vercel/commerce">
               <WillingWoodsIcon className="h-6" />
