@@ -3,7 +3,6 @@ import Footer from "@/components/layout/footer/footer";
 import Navbar from "@/components/layout/navbar/navbar";
 import ProductPageComponent from "@/components/productsLayout/productPage/page";
 import { getSingleProduct, queryProductsV1, shopifyFetch, singleProductQuery } from "@/lib/shopifyQueryV2";
-import FormatPrice from "@/lib/shopify/formatPrice";
 
 export async function generateStaticParams() {
   const response = await shopifyFetch(queryProductsV1)
@@ -90,67 +89,48 @@ function classNames(...classes) {
 }
 
 export default async function SingleProductPage({ params }) {
-  // const [product, setProduct] = useState(product1)
-  const [colorOptions, setColorOptions] = useState()
-  const [sizeOptions, setSizeOptions] = useState()
+  const [product, setProduct]=useState(product1)
+  const [colorOptions, setColorOptions]=useState()
+  const [sizeOptions, setSizeOptions]=useState()
   const [selectedColor, setSelectedColor] = useState()
   const [selectedSize, setSelectedSize] = useState()
   const { handle } = params
-  const [isLoading, setIsLoading] = useState(false)
   console.log(handle)
   console.log(params)
   console.log(params.handle)
 
+  // const product11 = await getSingleProduct(params.handle)
+  useEffect(()=>{
+    const fetchProduct=async()=>{
+      try{
+        console.log('begain')
+        const productData=await getSingleProduct(params.handle)
+        console.log('after')
 
-  const productData = await getSingleProduct(handle);
+        const options=productData.options || []
+        const colorOption=options.find((option)=>option.name==='Color')
+        const sizeOption=options.find((option)=>option.name==='Size')
 
-  const options = productData.options || [];
-  const colorOption = options.find((option) => option.name === 'Color');
-  const sizeOption = options.find((option) => option.name === 'Size');
+        setColorOptions(colorOption?.values || [])
+        setSizeOptions(sizeOption?.values||[])
+        //??test
+        const imageUrls=productData.edges.map((item)=>item.node.transformedSrc)
+        setProduct({
+          name:productData.title,
+          price:productData.priceRange.minVariantPrice.amount,
+          images:imageUrls,
+          colors:colorOptions,
+          sizes:sizeOptions,
+          description:product.description,
+        })
 
-  setColorOptions(colorOption?.values || []);
-  setSizeOptions(sizeOption?.values || []);
-
-  const imageUrls = productData.images.edges.map((item) => item.node.transformedSrc);
-  console.log(imageUrls)
-  // setProduct({
-  //   name: productData.title,
-  //   price: productData.priceRange.minVariantPrice.amount,
-  //   images: imageUrls,
-  //   colors: colorOption?.values || [],
-  //   sizes: sizeOption?.values || [],
-  //   description: productData.description,
-  // });
-  const product = {
-    name: productData.title,
-    price: productData.priceRange.minVariantPrice.amount,
-    images: imageUrls,
-    colors: colorOption?.values || [],
-    sizes: sizeOption?.values || [],
-    description: productData.description,
-    breadcrumbs: [
-      { id: 1, name: 'Men', href: '#' },
-      { id: 2, name: 'Clothing', href: '#' },
-    ],
-    highlights: [
-      'Hand cut and sewn locally',
-      'Dyed with our proprietary colors',
-      'Pre-washed & pre-shrunk',
-      'Ultra-soft 100% cotton',
-    ],
-    details:
-      'The 6-Pack includes two black, two white, and two heather gray Basic Tees. Sign up for our subscription service and be the first to get new, exciting colors, like our upcoming "Charcoal Gray" limited release.',
-  };
-  console.log(product.images[0])
-
-  async function checkOut() {
-    setIsLoading(true)
-    // const {data}=await getCheckOut(checkoutMutation, {variantId})
-    // const {webUrl}=data.checkoutCreate.checkout
-    const { webUrl } = 'https://baidu.com'
-    window.location.href = webUrl
-  }
-
+        const optionsIndex=productData.options.findIndex((colorOption)=>colorOption.name==='Color')
+        
+      }catch(error){error}
+    }
+    fetchProduct()
+  },[params.handle])
+  
   return (
     <>
       <div className="bg-white">
@@ -188,34 +168,31 @@ export default async function SingleProductPage({ params }) {
           <div className="mx-auto mt-6 max-w-2xl sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:gap-x-8 lg:px-8">
             <div className="aspect-h-4 aspect-w-3 hidden overflow-hidden rounded-lg lg:block">
               <img
-                // src={product.images[0].src}
-                src={product.images[0]}
-                // alt={product.images[0].alt}
+                src={product.images[0].src}
+                alt={product.images[0].alt}
                 className="h-full w-full object-cover object-center"
               />
             </div>
             <div className="hidden lg:grid lg:grid-cols-1 lg:gap-y-8">
               <div className="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg">
                 <img
-                  // src={product.images[1].src}
-                  src={product.images[1]}
-                  // alt={product.images[1].alt}
+                  src={product.images[1].src}
+                  alt={product.images[1].alt}
                   className="h-full w-full object-cover object-center"
                 />
               </div>
               <div className="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg">
                 <img
-                  // src={product.images[2].src}
-                  src={product.images[2]}
-                  // alt={product.images[2].alt}
+                  src={product.images[2].src}
+                  alt={product.images[2].alt}
                   className="h-full w-full object-cover object-center"
                 />
               </div>
             </div>
             <div className="aspect-h-5 aspect-w-4 lg:aspect-h-4 lg:aspect-w-3 sm:overflow-hidden sm:rounded-lg">
               <img
-                src={product.images[3]}
-                // alt={product.images[3].alt}
+                src={product.images[3].src}
+                alt={product.images[3].alt}
                 className="h-full w-full object-cover object-center"
               />
             </div>
@@ -230,7 +207,7 @@ export default async function SingleProductPage({ params }) {
             {/* Options */}
             <div className="mt-4 lg:row-span-3 lg:mt-0">
               <h2 className="sr-only">Product information</h2>
-              <p className="text-3xl tracking-tight text-gray-900">{FormatPrice(product.price)}</p>
+              <p className="text-3xl tracking-tight text-gray-900">{product.price}</p>
 
               {/* Reviews */}
               <div className="mt-6">
@@ -355,18 +332,9 @@ export default async function SingleProductPage({ params }) {
                 </div>
 
                 <button
-                  //add isloading ?? do not work
-                  // onClick={checkOut}
                   type="submit"
                   className="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-
                 >
-                  {isLoading && (
-                    <svg class="animate-spin h-5 w-5 mr-3 text-white " viewBox="0 0 24 24">
-                      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                  )}
                   Add to bag
                 </button>
               </form>
@@ -407,21 +375,6 @@ export default async function SingleProductPage({ params }) {
           </div>
         </div>
       </div>
-      <button
-        //add isloading ?? do not work
-        onClick={()=>setIsLoading(!isLoading)}
-        type="submit"
-        className="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-
-      >
-        {isLoading && (
-          <svg class="animate-spin h-5 w-5 mr-3 text-white " viewBox="0 0 24 24">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-          </svg>
-        )}
-        Add to bag
-      </button>
     </>
   )
 }
