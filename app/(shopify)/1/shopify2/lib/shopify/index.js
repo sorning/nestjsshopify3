@@ -6,6 +6,7 @@ import {
     getCollectionProductsQuery
 } from './queries/collection'
 import { getMenuQuery } from "./queries/menu";
+import { getPageQuery, getPagesQuery } from "./queries/page";
 
 const endpoint = `https://${process.env.SHOPIFY_DOMAIN}.myshopify.com/api/2023-01/graphql.json`
 const key = process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN
@@ -143,4 +144,21 @@ export async function getMenu(handle) {
             path: item.url.replace(domain, '').replace('/collections', '/search').replace('/pages','')
         })) || []
     )
+}
+
+export async function getPage(handle){
+    const res=await shopifyFetch({
+        query: getPageQuery,
+        variables:{handle}
+    })
+
+    return res.body.data.pageByHandle
+}
+
+export async function getPages(){
+    const res=await shopifyFetch({
+        query:getPagesQuery,
+    })
+
+    return removeEdgesAndNodes(res.body.data.pages)
 }
