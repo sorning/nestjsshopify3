@@ -4,6 +4,7 @@ import { HIDDEN_PRODUCT_TAG } from "../../../lib/shopify/constants"
 import { Gallery } from "../../../component/product/gallery"
 import { VariantSelector } from "../../../component/product/variant-selector"
 import Prose from "../../../component/prose"
+import { AddToCart } from "../../../component/product/cart/add-to-cart"
 
 export const runtime = 'edge'
 
@@ -89,7 +90,7 @@ export default async function ProductPage({ params }) {
                         {product.descriptionHtml ? (
                             <Prose className='mb-6 text-sm leading-tight' html={product.descriptionHtml} />
                         ):null}
-                    
+                        <AddToCart variants={product.variants} availableForSale={product.availableForSale} />
                     </div>
                 </div>
             </div>
