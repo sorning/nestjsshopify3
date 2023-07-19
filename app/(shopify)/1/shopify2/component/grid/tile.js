@@ -22,7 +22,7 @@ export function GridTileImage({
                 'bg-cyan-500 dark:bg-cyan-500': background === 'cyan',
                 'bg-gray-100 dark:bg-gray-100': background === 'gray',
                 'bg-gray-100 dark:bg-gray-900': !background,
-                relative: labels
+                relative: labels,
             })}
         >
             {active !== undefined && active ? (

@@ -1,5 +1,5 @@
 import { HIDDEN_PRODUCT_TAG, SHOPIFY_GRAPHQL_API_ENDPOINT,TAGS } from "./constants";
-import { getProductQuery } from "./queries/product";
+import { getProductQuery, getProductRecommendationsQuery, getProductsQuery } from "./queries/product";
 import {
     getCollectionQuery,
     getCollectionsQuery,
@@ -7,6 +7,8 @@ import {
 } from './queries/collection'
 import { getMenuQuery } from "./queries/menu";
 import { getPageQuery, getPagesQuery } from "./queries/page";
+import { addToCartMutation, createCartMutation, editCartItemsMutation } from "./mutations/cart";
+import { getCartQuery } from "./queries/cart";
 
 const endpoint = `https://${process.env.SHOPIFY_DOMAIN}.myshopify.com/api/2023-01/graphql.json`
 const key = process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN
@@ -53,6 +55,20 @@ async function shopifyFetch({
 
 const removeEdgesAndNodes = (array) => {
     return array.edges.map((edge) => edge?.node)
+}
+
+const reshapeCart=(cart)=>{
+    if (!cart.cost?.totalTaxAmount) {
+        cart.cost.totalTaxAmount={
+            amount:'0.0',
+            currencyCode:'USD'
+        }
+    }
+
+    return {
+        ...cart,
+        lines:removeEdgesAndNodes(cart.lines)
+    }
 }
 
 const reshapeCollection = (collection) => {
@@ -111,6 +127,67 @@ const reshapeProducts=(products)=>{
     return reshapedProducts
 }
 
+export async function createCart() {
+    const res= await shopifyFetch({
+        query: createCartMutation,
+        cache:'no-store',
+    })
+
+    return reshapeCart(res.body.data.cartCreate.cart)
+}
+
+export async function addToCart(cartId, lines) {
+    const res=await shopifyFetch({
+        query:addToCartMutation,
+        variables:{
+            cartId,
+            lines,
+        },
+        cache:'no-store'
+    })
+
+    return reshapeCart(res.body.data.cartLinesAdd.cart)
+}
+
+export async function updateCart(cartId, lines) {
+    const res=await shopifyFetch({
+        query:editCartItemsMutation,
+        variables:{
+            cartId,
+            lines,
+        },
+        cache:'no-store'
+    })
+
+    return reshapeCart(res.body.data.cartLinesUpdate.cart)
+}
+
+export async function getCart(cartId) {
+    const res=await shopifyFetch({
+        query: getCartQuery,
+        variables:{cartId},
+        cache:'no-store'
+    })
+
+    if (!res.body.data.cart) {
+        return null
+    }
+
+    return reshapeCart(res.body.data.cart)
+}
+
+export async function getCollection(handle) {
+    const res=await shopifyFetch({
+        query: getCollectionQuery,
+        tags:[TAGS.collections],
+        variables:{
+            handle
+        }
+    })
+
+    return reshapeCollection(res.body.data.collection)
+}
+
 export async function getCollectionProducts({collection,reverse,sortKey}) {
     const res=await shopifyFetch({
         query:getCollectionProductsQuery,
@@ -161,4 +238,42 @@ export async function getPages(){
     })
 
     return removeEdgesAndNodes(res.body.data.pages)
+}
+
+export async function getProduct(handle){
+    const res = await shopifyFetch({
+        query: getProductQuery,
+        tags:[TAGS.products],
+        variables:{
+            handle
+        }
+    })
+
+    return reshapeProduct(res.body.data.product, false)
+}
+
+export async function getProductRecommendations(productId) {
+    const res=await shopifyFetch({
+        query:getProductRecommendationsQuery,
+        tags:[TAGS.products],
+        variables:{
+            productId
+        }
+    })
+
+    return reshapeProducts(res.body.data.getProductRecommendations)
+}
+
+export async function getProducts({query, reverse, sortKey}) {
+    const res=await shopifyFetch({
+        query:getProductsQuery,
+        tags:[TAGS.products],
+        variables:{
+            query,
+            reverse,
+            sortKey,
+        }
+    })
+
+    return reshapeProducts(removeEdgesAndNodes(res.body.data.products))
 }
