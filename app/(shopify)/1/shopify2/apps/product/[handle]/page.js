@@ -13,7 +13,7 @@ export async function generateMetadata({ params }) {
 
     if (!product) return notFound
 
-    const { url, width, height, altText: alt } = product.featuredImage || []
+    const { url, width, height, altText: alt } = product.featuredImage || {}
     const hide = !product.tags.includes(HIDDEN_PRODUCT_TAG)
 
     return {

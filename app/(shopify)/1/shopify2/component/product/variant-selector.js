@@ -88,7 +88,6 @@ export function VariantSelector({ options, variants }) {
                     )
                 })}
             </dd>
-
         </dl>
     ))
 }
