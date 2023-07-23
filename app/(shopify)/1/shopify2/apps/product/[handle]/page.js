@@ -1,12 +1,13 @@
 import { notFound } from "next/navigation"
-import { getProduct } from "../../../lib/shopify"
+import { getProduct, getProductRecommendations } from "../../../lib/shopify"
 import { HIDDEN_PRODUCT_TAG } from "../../../lib/shopify/constants"
 import { Gallery } from "../../../component/product/gallery"
 import { VariantSelector } from "../../../component/product/variant-selector"
 import Prose from "../../../component/prose"
 import { AddToCart } from "../../../component/product/cart/add-to-cart"
+import Grid from "../../../component/grid"
 
-export const runtime = 'edge'
+// export const runtime = 'edge'
 
 export async function generateMetadata({ params }) {
     const product = await getProduct(params.handle)
@@ -95,5 +96,20 @@ export default async function ProductPage({ params }) {
                 </div>
             </div>
         </>
+    )
+}
+
+async function RelatedProducts({id}){
+    const relatedProducts=await getProductRecommendations(id)
+
+    if (!relatedProducts.length) return null
+
+    return (
+        <div className="px-4 py-8">
+            <div className="mb-4 text-3xl font-bold">Related Products</div>
+            <Grid>
+                
+            </Grid>
+        </div>
     )
 }

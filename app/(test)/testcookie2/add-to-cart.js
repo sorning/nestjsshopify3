@@ -2,26 +2,19 @@
 
 import { useRouter, useSearchParams } from "next/navigation"
 import { useEffect, useState, useTransition } from "react"
-import LoadingDots from "../../loading-dots"
 import { addItem } from "./actions"
 import clsx from "clsx"
 
 export function AddToCart({
     variants,
-    availableForSale
+    availableForSale=true
 }) {
-    const [selectedVariantId, setSelectedVariantId] = useState(variants[0]?.id)
+    const [selectedVariantId, setSelectedVariantId] = useState('')
     const router = useRouter()
     const searchParams = useSearchParams()
     const [isPending, startTransition] = useTransition()
 
-    useEffect(() => {
-        const variant = variants.find((variant) => variant.selectedOptions.every((option) => option.value === searchParams.get(option.name.toLowerCase())))
-
-        if (variant) {
-            setSelectedVariantId(variant.id)
-        }
-    }, [searchParams, variants, setSelectedVariantId])
+  
 
     return (
         <>
@@ -35,8 +28,6 @@ export function AddToCart({
 
                         if (error) {
                             alert(error)
-                            //debug: add alert
-                            alert('add to card error')
                             return
                         }
 
@@ -52,7 +43,7 @@ export function AddToCart({
                 )}
             >
                 <span>{availableForSale ? 'Add To Cart' : 'Out Of Stock'}</span>
-                {isPending ? <LoadingDots className='bg-white dark:bg-black' /> : null}
+                {isPending ? <p>dots</p> : null}
             </button>
         </>
     )
