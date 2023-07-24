@@ -6,7 +6,7 @@ import { usePathname, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import clsx from "clsx";
 
-function PahtFilterItem({ item }) {
+function PathFilterItem({ item }) {
     const pathname = usePathname()
     const searchParams = useSearchParams()
     const [active, setActive] = useState(pathname === item.path)
@@ -22,7 +22,9 @@ function PahtFilterItem({ item }) {
         <>
             <li className="mt-2 flex text-sm text-gray-400" key={item.title}>
                 <Link
-                    href={createUrl(item.path, newParams)}
+                    //set to our own pathname
+                    // href={createUrl(item.path, newParams)}
+                    href={`/1/shopify2/apps${createUrl(item.path, newParams)}`}
                     className={clsx('w-full hover:text-gray-800 dark:hover:text-gray-100', {
                         'text-gray-600 dark:text-gray-400': !active,
                         'font-semibold text-black dark:text-white': active
@@ -67,5 +69,5 @@ function SortFilterItem({ item }) {
 }
 
 export function FilterItem({ item }) {
-    return 'path' in item ? <PahtFilterItem item={item} /> : <SortFilterItem item={item} />
+    return 'path' in item ? <PathFilterItem item={item} /> : <SortFilterItem item={item} />
 }

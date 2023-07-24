@@ -20,7 +20,8 @@ export default async function Navbar() {
                 </div>
                 <div className="flex justify-self-center md:w-1/3 md:justify-self-start">
                     <div className="md:mr-4">
-                        <Link href='/' aria-label="go back home">
+                        {/* set to our own project root pathname */}
+                        <Link href='/1/shopify2/apps' aria-label="go back home">
                             <LogoIcon className='h-8 transition-transform hover:scale-110' />
                         </Link>
                     </div>
@@ -29,7 +30,8 @@ export default async function Navbar() {
                             {menu.map((item) => (
                                 <li key={item.title}>
                                     <Link
-                                        href={item.path}
+                                        // href={item.path}
+                                        href={`/1/shopify2/apps${item.path}`}
                                         className="rounded-lg px-2 py-1 text-gray-800 hover:text-gray-500 dark:text-gray-200 dark:hover:text-gray-400"
                                     >
                                         {item.title}
