@@ -9,7 +9,7 @@ export default function FilterItemDropdown({ list }) {
     const pathname = usePathname()
     const searchParams = useSearchParams()
     const [active, setActive] = useState('')
-    cosnt[openSelect, setOpenSelect] = useState(false)
+    const [openSelect, setOpenSelect] = useState(false)
     //need to confirm the useref
     const ref = useRef()
 

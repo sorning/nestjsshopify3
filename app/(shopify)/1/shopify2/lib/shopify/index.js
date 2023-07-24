@@ -12,7 +12,10 @@ import { getCartQuery } from "./queries/cart";
 
 const endpoint = `https://${process.env.SHOPIFY_DOMAIN}.myshopify.com/api/2023-01/graphql.json`
 const key = process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN
-const domain = `https://${process.env.SHOPIFY_DOMAIN}`
+//change domain from `https://${process.env.SHOPIFY_DOMAIN}.myshopify.com` to {now}
+// const domain = `https://${process.env.SHOPIFY_DOMAIN}`
+const domain = `https://${process.env.SHOPIFY_DOMAIN}.myshopify.com`
+
 
 async function shopifyFetch({
     cache = 'force-cache',
